@@ -59,6 +59,13 @@ FP_height = Trim(CStr(objSheet.Cells(83, 5).Value))
 FP_gross_weight = Trim(CStr(objSheet.Cells(84, 5).Value))
 FP_vol = Trim(CStr(objSheet.Cells(85,5).Value))
 
+Shopeur_family = Trim(CStr(objSheet.Cells(94,5).Value))
+Trace_family = Trim(CStr(objSheet.Cells(95,5).Value))
+Stock_Removal_ind = Trim(CStr(objSheet.Cells(96,5).Value))
+Stock_placement_ind = Trim(CStr(objSheet.Cells(97,5).Value))
+Storage_section_ind = Trim(CStr(objSheet.Cells(98,5).Value))
+Special_movemnet_ind = Trim(CStr(objSheet.Cells(99,5).Value))
+
 Despatchable = Trim(CStr(objSheet.Cells(113,5).Value)) 
 Foldable = Trim(CStr(objSheet.Cells(114,5).Value)) 
 Non_Conforming = Trim(CStr(objSheet.Cells(115,5).Value))
