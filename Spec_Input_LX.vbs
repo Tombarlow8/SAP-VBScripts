@@ -15,7 +15,6 @@ End If
 
 session.findById("wnd[0]").resizeWorkingPane 100,39,false
 
-
 'Github link: https://github.com/Tombarlow8/SAP-VBScripts/blob/master/Spec_Input_LX.vbs 
 'Make sure the excel spreadsheet is the active sheet before 
 'Accsessing the script through the Macro should ensure this.
@@ -27,6 +26,7 @@ Set objSheet = objExcel.ActiveWorkbook.Worksheets("Latest")
 
 FG = Trim(CStr(objSheet.Cells(2, 2).Value))
 Cycle_counting_Cat = Trim(CStr(objSheet.Cells(111, 5).Value))
+Warehouse_number = Trim(CStr(objSheet.Cells(4, 2).Value))
 Unit_length = Trim(CStr(objSheet.Cells(51, 5).Value))
 Unit_width = Trim(CStr(objSheet.Cells(52, 5).Value))
 Unit_height = Trim(CStr(objSheet.Cells(53, 5).Value))
@@ -66,69 +66,72 @@ Trace_family = Trim(CStr(objSheet.Cells(95,5).Value))
 Stock_Removal_ind = Trim(CStr(objSheet.Cells(96,5).Value))
 Stock_placement_ind = Trim(CStr(objSheet.Cells(97,5).Value))
 Storage_section_ind = Trim(CStr(objSheet.Cells(98,5).Value))
-Special_movemnet_ind = Trim(CStr(objSheet.Cells(99,5).Value))
+Special_movement_ind = Trim(CStr(objSheet.Cells(99,5).Value))
 
 Despatchable = Trim(CStr(objSheet.Cells(113,5).Value)) 
 Foldable = Trim(CStr(objSheet.Cells(114,5).Value)) 
 Non_Conforming = Trim(CStr(objSheet.Cells(115,5).Value))
 
-session.findById("wnd[0]/tbar[0]/okcd").text = "/nmm02"
-session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
-session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[1]").sendVKey 0
 
-'If an error pops up in the status bar while in MM02 it will create the code in MM01 instead
-If session.FindById("wnd[0]/sbar").Text = "Select at least one view" Then
-    session.findById("wnd[0]/tbar[0]/okcd").text = "/nmm01"
+Call ZUKMM02LX
+Call MM17
+Call MM02
+Call YLC01
+
+
+Sub MM02()        
+    session.findById("wnd[0]/tbar[0]/okcd").text = "/nmm02"
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[1]").sendVKey 0
-    session.findById("wnd[1]").sendVKey 0
-End If
 
-'//TODO: do we still need this with LX
-'Changing the Net weight of the Unit to be the same as the Gross Weight
-session.findById("wnd[0]/tbar[1]/btn[30]").press
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02").select
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02/ssubTABFRA1:SAPLMGMM:2110/subSUB2:SAPLMGD1:8020/tblSAPLMGD1TC_ME_8020/txtSMEINH-NTGEW[18,0]").text = Trim(CStr(objSheet.Cells(14, 8).Value))
-'session.findById("wnd[0]").sendVKey 0
+    'If an error pops up in the status bar while in MM02 it will create the code in MM01 instead
+    If session.FindById("wnd[0]/sbar").Text = "Select at least one view" Then
+        session.findById("wnd[0]/tbar[0]/okcd").text = "/nmm01"
+        session.findById("wnd[0]").sendVKey 0
+        session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
+        session.findById("wnd[0]").sendVKey 0
+        session.findById("wnd[0]").sendVKey 0
+        session.findById("wnd[1]").sendVKey 0
+        session.findById("wnd[1]").sendVKey 0
+    End If
 
-'Clicking the 'main data' button
-session.findById("wnd[0]/tbar[1]/btn[27]").press
+    '//TODO: do we still need this with LX
+    'Changing the Net weight of the Unit to be the same as the Gross Weight
+    session.findById("wnd[0]/tbar[1]/btn[30]").press
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02").select
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02/ssubTABFRA1:SAPLMGMM:2110/subSUB2:SAPLMGD1:8020/tblSAPLMGD1TC_ME_8020/txtSMEINH-NTGEW[18,0]").text = Trim(CStr(objSheet.Cells(14, 8).Value))
+    'session.findById("wnd[0]").sendVKey 0
 
-'"Enters through" until the warnings have gone
-Call RecursiveSAPStatusBarCheck
+    'Clicking the 'main data' button
+    session.findById("wnd[0]/tbar[1]/btn[27]").press
 
-'Filling in the backscreen 'Warehouse managment 1'
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21").select
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZA").text = Stock_placement_ind
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZE").text = Stock_Removal_ind
-'//TODO: check if these 2 are the correct way round
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LGBKZ").text = Storage_section_ind
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-BSSKZ").text = Special_movemnet_ind
+    '"Enters through" until the warnings have gone
+    Call RecursiveSAPStatusBarCheck
 
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB3:SAPLYFCD:1000/ctxtMLGN-FAMCODE").text = Shopeur_family
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB3:SAPLYFCD:1000/ctxtMLGN-FAMTRA").text = Trace_family
+    'Filling in the backscreen 'Warehouse managment 1'
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21").select
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZA").text = Stock_placement_ind
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZE").text = Stock_Removal_ind
+    '//TODO: check if these 2 are the correct way round
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LGBKZ").text = Storage_section_ind
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-BSSKZ").text = Special_movement_ind
 
-'Save
-session.findById("wnd[0]").sendVKey 11
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB3:SAPLYFCD:1000/ctxtMLGN-FAMCODE").text = Shopeur_family
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB3:SAPLYFCD:1000/ctxtMLGN-FAMTRA").text = Trace_family
 
-'Pauses the program for 1 second otherwise the user locks themselves out of the code when trying to go into MM02
-Wscript.Sleep 1000
+    'Add the cycle counting category in
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP19").select
+    session.findById("wnd[1]/tbar[0]/btn[0]").press
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP19/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2701/ctxtMARC-ABCIN").text = Cycle_counting_Cat
+    session.findById("wnd[0]/tbar[0]/btn[11]").press
 
-'//TODO: if 'Procure Trade Data' digit no longer added in thei swill need to be moved
-'Add the cycle counting category in
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP19").select
-session.findById("wnd[1]/tbar[0]/btn[0]").press
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP19/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2701/ctxtMARC-ABCIN").text = Cycle_counting_Cat
-session.findById("wnd[0]/tbar[0]/btn[11]").press
+    'Save
+    session.findById("wnd[0]").sendVKey 11
+End sub
 
-'Save
-session.findById("wnd[0]").sendVKey 11
 
 Sub MM17()
     session.findById("wnd[0]/tbar[0]/okcd").text = "/nmm17"
@@ -241,14 +244,10 @@ End Sub
 
 
 Sub YLC01()
-'//TODO: change these cell references
-    des = Trim(CStr(objSheet.Cells(i,3).Value))
-    noncon = Trim(CStr(objSheet.Cells(i,2).Value))
-    res = Trim(CStr(objSheet.Cells(i,4).Value))
     session.findById("wnd[0]/tbar[0]/okcd").text = "/nylc01"
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
-    session.findById("wnd[0]/usr/ctxtRMMG1-LGNUM").text = "uk3"
+    session.findById("wnd[0]/usr/ctxtRMMG1-LGNUM").text = Warehouse_number
     session.findById("wnd[0]/tbar[1]/btn[6]").press
     session.findById("wnd[0]/tbar[1]/btn[5]").press
     '//TODO: add Non conforming
