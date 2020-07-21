@@ -114,48 +114,11 @@ session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subS
 session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB3:SAPLYFCD:1000/ctxtMLGN-FAMCODE").text = Shopeur_family
 session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB3:SAPLYFCD:1000/ctxtMLGN-FAMTRA").text = Trace_family
 
-'//TODO: DO we still need this with the new functionality in YLC01
-'Capacity Usage
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2731/txtMLGN-MKAPV").text = Trim(CStr(objSheet.Cells(19, 6).Value))
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2731/ctxtMLGN-BEZME").text = "FP"
-
-'//TODO: dpenedant on warehouse LPD have 'qp' etc
-'Filling in the backscreen 'Warehouse managment 2'
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22").select
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/txtMLGN-LHMG1").text = Trim(CStr(objSheet.Cells(5, 2).Value))
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/ctxtMLGN-LHME1").text = "un"
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/ctxtMLGN-LETY1").text = "fp"
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/txtMLGN-LHMG2").text = Trim(CStr(objSheet.Cells(6, 2).Value))
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/ctxtMLGN-LHME2").text = "un"
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/ctxtMLGN-LETY2").text = "pp"
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/txtMLGN-LHMG3").text = Trim(CStr(objSheet.Cells(7, 8).Value))
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/ctxtMLGN-LHME3").text = "un"
-'//TODO: ST or STD?
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP22/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2732/ctxtMLGN-LETY3").text = "std"
-
 'Save
 session.findById("wnd[0]").sendVKey 11
 
 'Pauses the program for 1 second otherwise the user locks themselves out of the code when trying to go into MM02
 Wscript.Sleep 1000
-
-'//TODO: LX updates procure trade data regardless so don't have to do this anymore
-'Re-Entering MM02 to enter the procure trade data as this can only be done in MM02
-session.findById("wnd[0]/tbar[0]/okcd").text = "/nmm02"
-session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
-session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[1]").sendVKey 0
-session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP33").select
-session.findById("wnd[1]/tbar[0]/btn[0]").press
-
-'Looks at the Traceability Family to determine the 'Procure Trade Data' digit
-If Trim(CStr(objSheet.Cells(11, 2).Value)) = "5" Then
-    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP33/ssubTABFRA1:SAPLMGMM:2004/subSUB5:SAPLYMM_BPGV2_2:2016/ctxtYTGRP6-TRACEABILITY").text = "1"
-Else
-    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP33/ssubTABFRA1:SAPLMGMM:2004/subSUB5:SAPLYMM_BPGV2_2:2016/ctxtYTGRP6-TRACEABILITY").text = "0"
-End If
 
 '//TODO: if 'Procure Trade Data' digit no longer added in thei swill need to be moved
 'Add the cycle counting category in
