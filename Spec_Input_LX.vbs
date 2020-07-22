@@ -27,12 +27,15 @@ Set objSheet = objExcel.ActiveWorkbook.Worksheets("Latest")
 FG = Trim(CStr(objSheet.Cells(2, 2).Value))
 Cycle_counting_Cat = Trim(CStr(objSheet.Cells(111, 5).Value))
 Warehouse_number = Trim(CStr(objSheet.Cells(4, 2).Value))
+
+Unit_ean = Trim(CStr(objSheet.Cells(50, 5).Value))
 Unit_length = Trim(CStr(objSheet.Cells(51, 5).Value))
 Unit_width = Trim(CStr(objSheet.Cells(52, 5).Value))
 Unit_height = Trim(CStr(objSheet.Cells(53, 5).Value))
 Unit_gross_weight = Trim(CStr(objSheet.Cells(54,5).Value))
 Unit_vol = Trim(CStr(objSheet.Cells(55,5).Value))
 '//TODO: Unit Net weight?
+Pak_ean = Trim(CStr(objSheet.Cells(57, 5).Value))
 Pak_qty = Trim(CStr(objSheet.Cells(58, 5).Value))
 Pak_length = Trim(CStr(objSheet.Cells(59, 5).Value))
 Pak_width = Trim(CStr(objSheet.Cells(60, 5).Value))
@@ -40,6 +43,7 @@ Pak_height = Trim(CStr(objSheet.Cells(61, 5).Value))
 Pak_gross_weight = Trim(CStr(objSheet.Cells(62, 5).Value))
 Pak_vol = Trim(CStr(objSheet.Cells(63,5).Value))
 
+Std_ean = Trim(CStr(objSheet.Cells(65, 5).Value))
 Std_qty = Trim(CStr(objSheet.Cells(66, 5).Value))
 Std_length = Trim(CStr(objSheet.Cells(67, 5).Value))
 Std_width = Trim(CStr(objSheet.Cells(68, 5).Value))
@@ -47,6 +51,7 @@ Std_height = Trim(CStr(objSheet.Cells(69, 5).Value))
 Std_gross_weight = Trim(CStr(objSheet.Cells(70, 5).Value))
 Std_vol = Trim(CStr(objSheet.Cells(71,5).Value))
 
+Lay_ean = Trim(CStr(objSheet.Cells(72, 5).Value))
 Lay_qty = Trim(CStr(objSheet.Cells(73, 5).Value))
 Lay_length = Trim(CStr(objSheet.Cells(74, 5).Value))
 Lay_width = Trim(CStr(objSheet.Cells(75, 5).Value))
@@ -54,6 +59,7 @@ Lay_height = Trim(CStr(objSheet.Cells(76, 5).Value))
 Lay_gross_weight = Trim(CStr(objSheet.Cells(77, 5).Value))
 Lay_vol = Trim(CStr(objSheet.Cells(78,5).Value))
 
+FP_ean = Trim(CStr(objSheet.Cells(79, 5).Value))
 FP_qty = Trim(CStr(objSheet.Cells(80, 5).Value))
 FP_length = Trim(CStr(objSheet.Cells(81, 5).Value))
 FP_width = Trim(CStr(objSheet.Cells(82, 5).Value))
@@ -138,7 +144,7 @@ Sub MM17()
     session.findById("wnd[0]").sendVKey 0
 
     'using the PPD varient to limit the table to UK only measurements (gets rid of South africa and the other measurements)
-    session.findById("wnd[0]/usr/ctxtMASSSCREEN-VARNAME").text = "PPD MARM"
+    session.findById("wnd[0]/usr/ctxtMASSSCREEN-VARNAME").text = "PPD UoM"
     session.findById("wnd[0]/tbar[1]/btn[8]").press
     session.findById("wnd[0]/usr/tabsTAB/tabpCHAN/ssubSUB_ALL:SAPLMASS_SEL_DIALOG:0200/ssubSUB_SEL:SAPLMASSFREESELECTIONS:1000/sub:SAPLMASSFREESELECTIONS:1000/ctxtMASSFREESEL-LOW[0,24]").text = FG
 
@@ -199,7 +205,11 @@ Sub MM17()
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,2]").text = Pak_gross_weight
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,3]").text = FP_width
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,4]").text = Unit_gross_weight
-
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,0]").text = Lay_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,1]").text = Std_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,2]").text = Pak_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,3]").text = FP_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,4]").text = Unit_ean
     'These units of measure should be always the same therefore hardcoded
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD9-VALUE-LEFT[9,0]").text = "MM"
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD9-VALUE-LEFT[9,1]").text = "MM"
