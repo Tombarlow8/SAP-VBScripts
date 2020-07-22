@@ -69,8 +69,8 @@ Storage_section_ind = Trim(CStr(objSheet.Cells(98,5).Value))
 Special_movement_ind = Trim(CStr(objSheet.Cells(99,5).Value))
 
 Despatchable = Trim(CStr(objSheet.Cells(113,5).Value)) 
-Foldable = Trim(CStr(objSheet.Cells(114,5).Value)) 
-Non_Conforming = Trim(CStr(objSheet.Cells(115,5).Value))
+Non_Conforming = Trim(CStr(objSheet.Cells(114,5).Value)) 
+Restrict = Trim(CStr(objSheet.Cells(115,5).Value))
 
 
 Call ZUKMM02LX
@@ -244,17 +244,34 @@ End Sub
 
 
 Sub YLC01()
-    session.findById("wnd[0]/tbar[0]/okcd").text = "/nylc01"
+    session.findById("wnd[0]/tbar[0]/okcd").text = "/nYLC01"
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
     session.findById("wnd[0]/usr/ctxtRMMG1-LGNUM").text = Warehouse_number
-    session.findById("wnd[0]/tbar[1]/btn[6]").press
     session.findById("wnd[0]/tbar[1]/btn[5]").press
-    '//TODO: add Non conforming
-    session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR4").text = Foldable
+    ' IF status bar...
+    If session.FindById("wnd[0]/sbar").Text = "This complete material key already exist in table YLCD01" Then
+        session.findById("wnd[0]/sbar").doubleClick
+        session.findById("wnd[0]/shellcont").close
+        session.findById("wnd[0]/tbar[1]/btn[6]").press
+        session.findById("wnd[0]/tbar[1]/btn[14]").press
+        session.findById("wnd[1]/usr/btnSPOP-OPTION1").press
+        session.findById("wnd[1]/tbar[0]/btn[0]").press
+        session.findById("wnd[0]/tbar[1]/btn[5]").press
+    End If
+
+    If 
+    session.findById("wnd[0]/usr/chkYLCD01-YP_NOTUSE").selected = true
+    session.findById("wnd[0]/usr/chkYLCD01-YL_NOTUSE").selected = true
+    session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR4").text = Non_Conforming
     session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR5").text = Despatchable
-    session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR6").text = '//TODO: find out which one from the sheet
+    session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR6").text = Restrict
+    'Fragile?
+    'session.findById("wnd[0]/usr/txtYLCD01-YLOCPAR7").text = "X"
+    session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[0]/tbar[0]/btn[11]").press
+    session.findById("wnd[1]/usr/btnSPOP-OPTION1").press
+    session.findById("wnd[1]/usr/btnBUTTON_1").press
     session.findById("wnd[1]/usr/btnSPOP-OPTION1").press
     session.findById("wnd[1]/tbar[0]/btn[0]").press
 End Sub
