@@ -27,6 +27,7 @@ Set objSheet = objExcel.ActiveWorkbook.Worksheets("Latest")
 FG = Trim(CStr(objSheet.Cells(2, 2).Value))
 Cycle_counting_Cat = Trim(CStr(objSheet.Cells(111, 5).Value))
 Warehouse_number = Trim(CStr(objSheet.Cells(4, 2).Value))
+Plant = Trim(CStr(objSheet.Cells(118, 5).Value))
 
 Unit_ean = Trim(CStr(objSheet.Cells(50, 5).Value))
 Unit_length = Trim(CStr(objSheet.Cells(51, 5).Value))
@@ -34,7 +35,8 @@ Unit_width = Trim(CStr(objSheet.Cells(52, 5).Value))
 Unit_height = Trim(CStr(objSheet.Cells(53, 5).Value))
 Unit_gross_weight = Trim(CStr(objSheet.Cells(54,5).Value))
 Unit_vol = Trim(CStr(objSheet.Cells(55,5).Value))
-'//TODO: Unit Net weight?
+Unit_Net_weight = Trim(CStr(objSheet.Cells(55,5).Value))
+
 Pak_ean = Trim(CStr(objSheet.Cells(57, 5).Value))
 Pak_qty = Trim(CStr(objSheet.Cells(58, 5).Value))
 Pak_length = Trim(CStr(objSheet.Cells(59, 5).Value))
@@ -51,7 +53,6 @@ Std_height = Trim(CStr(objSheet.Cells(69, 5).Value))
 Std_gross_weight = Trim(CStr(objSheet.Cells(70, 5).Value))
 Std_vol = Trim(CStr(objSheet.Cells(71,5).Value))
 
-Lay_ean = Trim(CStr(objSheet.Cells(72, 5).Value))
 Lay_qty = Trim(CStr(objSheet.Cells(73, 5).Value))
 Lay_length = Trim(CStr(objSheet.Cells(74, 5).Value))
 Lay_width = Trim(CStr(objSheet.Cells(75, 5).Value))
@@ -59,7 +60,6 @@ Lay_height = Trim(CStr(objSheet.Cells(76, 5).Value))
 Lay_gross_weight = Trim(CStr(objSheet.Cells(77, 5).Value))
 Lay_vol = Trim(CStr(objSheet.Cells(78,5).Value))
 
-FP_ean = Trim(CStr(objSheet.Cells(79, 5).Value))
 FP_qty = Trim(CStr(objSheet.Cells(80, 5).Value))
 FP_length = Trim(CStr(objSheet.Cells(81, 5).Value))
 FP_width = Trim(CStr(objSheet.Cells(82, 5).Value))
@@ -104,11 +104,10 @@ Sub MM02()
         session.findById("wnd[1]").sendVKey 0
     End If
 
-    '//TODO: do we still need this with LX
-    'Changing the Net weight of the Unit to be the same as the Gross Weight
+    'Changing the Net weight of the Unit as it can only be done in MM01/2
     session.findById("wnd[0]/tbar[1]/btn[30]").press
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02").select
-    session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02/ssubTABFRA1:SAPLMGMM:2110/subSUB2:SAPLMGD1:8020/tblSAPLMGD1TC_ME_8020/txtSMEINH-NTGEW[18,0]").text = Trim(CStr(objSheet.Cells(14, 8).Value))
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02/ssubTABFRA1:SAPLMGMM:2110/subSUB2:SAPLMGD1:8020/tblSAPLMGD1TC_ME_8020/txtSMEINH-NTGEW[18,0]").text = Unit_Net_weight
     'session.findById("wnd[0]").sendVKey 0
 
     'Clicking the 'main data' button
@@ -240,15 +239,15 @@ Sub ZUKMM02LX()
     'Setting the flag to take the user to MM02
     session.findById("wnd[0]/usr/chkP_MM02").selected = true
     session.findById("wnd[0]/usr/ctxtP_MATNR").text = FG
-    session.findById("wnd[0]/usr/ctxtP_WERKS").text = "LOUK"
+    session.findById("wnd[0]/usr/ctxtP_WERKS").text = Plant
     session.findById("wnd[0]/tbar[1]/btn[8]").press
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[1]").close
     session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[1]").sendVKey 0
-    session.findById("wnd[1]/usr/ctxtRMMG1-WERKS").text = "LOUK"
-    session.findById("wnd[1]/usr/ctxtRMMG1-LGNUM").text = "UK3"
+    session.findById("wnd[1]/usr/ctxtRMMG1-WERKS").text = Plant
+    session.findById("wnd[1]/usr/ctxtRMMG1-LGNUM").text = Warehouse_number
     session.findById("wnd[1]/tbar[0]/btn[0]").press
 End Sub
 
