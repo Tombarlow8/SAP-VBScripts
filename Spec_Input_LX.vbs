@@ -67,6 +67,11 @@ FP_height = Trim(CStr(objSheet.Cells(83, 5).Value))
 FP_gross_weight = Trim(CStr(objSheet.Cells(84, 5).Value))
 FP_vol = Trim(CStr(objSheet.Cells(85,5).Value))
 
+Support_Code = Trim(CStr(objSheet.Cells(87,5).Value))
+Support_Height = Trim(CStr(objSheet.Cells(88,5).Value))
+Boxes_per_Layer = Trim(CStr(objSheet.Cells(89,5).Value))
+Layers_per_Pallet = Trim(CStr(objSheet.Cells(90,5).Value))
+
 Shopeur_family = Trim(CStr(objSheet.Cells(94,5).Value))
 Trace_family = Trim(CStr(objSheet.Cells(95,5).Value))
 Stock_Removal_ind = Trim(CStr(objSheet.Cells(96,5).Value))
@@ -133,6 +138,13 @@ Sub MM02()
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP19/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2701/ctxtMARC-ABCIN").text = Cycle_counting_Cat
     session.findById("wnd[0]/tbar[0]/btn[11]").press
 
+    'Maintain the manutention & label data
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34").select
+    session.findById("wnd[1]/tbar[0]/btn[0]").press
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/ctxtYTGRP11-TYSUP").text = Support_Code
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-LAYNB").text = Layers_per_Pallet
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-YNBPROD_LAY").text = Boxes_per_Layer
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-HOEHE_MAN").text = Support_Height    
     'Save
     session.findById("wnd[0]").sendVKey 11
 End sub
