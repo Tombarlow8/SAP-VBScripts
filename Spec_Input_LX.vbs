@@ -80,8 +80,8 @@ Storage_section_ind = Trim(CStr(objSheet.Cells(98,5).Value))
 Special_movement_ind = Trim(CStr(objSheet.Cells(99,5).Value))
 
 Despatchable = Trim(CStr(objSheet.Cells(113,5).Value)) 
-Non_Conforming = Trim(CStr(objSheet.Cells(114,5).Value)) 
-Restrict = Trim(CStr(objSheet.Cells(115,5).Value))
+Non_Conforming = Trim(CStr(objSheet.Cells(115,5).Value)) 
+Restrict = Trim(CStr(objSheet.Cells(114,5).Value))
 
 
 Call ZUKMM02LX
@@ -118,11 +118,12 @@ Sub MM02()
     'Clicking the 'main data' button
     session.findById("wnd[0]/tbar[1]/btn[27]").press
 
-    '"Enters through" until the warnings have gone
+    '"Enters through" until the warnings have gone needs an initial enter to start
+    session.findById("wnd[0]").sendVKey 0
     Call RecursiveSAPStatusBarCheck
-
+    
     'Filling in the backscreen 'Warehouse managment 1'
-    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21").select
+    'session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21").select
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZA").text = Stock_placement_ind
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZE").text = Stock_Removal_ind
     '//TODO: check if these 2 are the correct way round
@@ -136,7 +137,7 @@ Sub MM02()
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP19").select
     session.findById("wnd[1]/tbar[0]/btn[0]").press
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP19/ssubTABFRA1:SAPLMGMM:2000/subSUB2:SAPLMGD1:2701/ctxtMARC-ABCIN").text = Cycle_counting_Cat
-    session.findById("wnd[0]/tbar[0]/btn[11]").press
+    
 
     'Maintain the manutention & label data
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34").select
@@ -146,7 +147,7 @@ Sub MM02()
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-YNBPROD_LAY").text = Boxes_per_Layer
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-HOEHE_MAN").text = Support_Height    
     'Save
-    session.findById("wnd[0]").sendVKey 11
+    session.findById("wnd[0]/tbar[0]/btn[11]").press
 End sub
 
 
@@ -214,13 +215,13 @@ Sub MM17()
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,0]").text = Lay_gross_weight
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,1]").text = Std_gross_weight
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,2]").text = Pak_gross_weight
-    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,3]").text = FP_width
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,3]").text = FP_gross_weight
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,4]").text = Unit_gross_weight
-    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[8,0]").text = Lay_ean
-    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,1]").text = Std_ean
-    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,2]").text = Pak_ean
-    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,3]").text = FP_ean
-    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD8-VALUE-RIGHT[12,4]").text = Unit_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD12-VALUE-LEFT[12,0]").text = Lay_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD12-VALUE-LEFT[12,1]").text = Std_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD12-VALUE-LEFT[12,2]").text = Pak_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD12-VALUE-LEFT[12,3]").text = FP_ean
+    session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD12-VALUE-LEFT[12,4]").text = Unit_ean
     'These units of measure should be always the same therefore hardcoded
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD9-VALUE-LEFT[9,0]").text = "MM"
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD9-VALUE-LEFT[9,1]").text = "MM"
@@ -239,7 +240,6 @@ Sub MM17()
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD11-VALUE-LEFT[11,4]").text = "G"
 
     session.findById("wnd[0]/tbar[0]/btn[11]").press
-
 End Sub
 
 
@@ -249,18 +249,14 @@ Sub ZUKMM02LX()
     'Setting the LX flag for material changes
     session.findById("wnd[0]/usr/chkP_ACTIVE").selected = true
     'Setting the flag to take the user to MM02
-    session.findById("wnd[0]/usr/chkP_MM02").selected = true
+    session.findById("wnd[0]/usr/chkP_MM02").selected = false
     session.findById("wnd[0]/usr/ctxtP_MATNR").text = FG
     session.findById("wnd[0]/usr/ctxtP_WERKS").text = Plant
     session.findById("wnd[0]/tbar[1]/btn[8]").press
     session.findById("wnd[0]").sendVKey 0
+    'if the LX tick is alrwady in no message box pop up is needed to close
+    on error resume next
     session.findById("wnd[1]").close
-    session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
-    session.findById("wnd[0]").sendVKey 0
-    session.findById("wnd[1]").sendVKey 0
-    session.findById("wnd[1]/usr/ctxtRMMG1-WERKS").text = Plant
-    session.findById("wnd[1]/usr/ctxtRMMG1-LGNUM").text = Warehouse_number
-    session.findById("wnd[1]/tbar[0]/btn[0]").press
 End Sub
 
 
@@ -281,9 +277,12 @@ Sub YLC01()
         session.findById("wnd[0]/tbar[1]/btn[5]").press
     End If
 
-    If 
-    session.findById("wnd[0]/usr/chkYLCD01-YP_NOTUSE").selected = true
-    session.findById("wnd[0]/usr/chkYLCD01-YL_NOTUSE").selected = true
+    If Trim(CStr(objSheet.Cells(116,5).Value)) = "X" Then
+        session.findById("wnd[0]/usr/chkYLCD01-YP_NOTUSE").selected = true
+    End If
+    If Trim(CStr(objSheet.Cells(117,5).Value)) = "X" Then
+        session.findById("wnd[0]/usr/chkYLCD01-YL_NOTUSE").selected = true
+    End If 
     session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR4").text = Non_Conforming
     session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR5").text = Despatchable
     session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR6").text = Restrict
@@ -302,7 +301,7 @@ End Sub
 'bar for warnings related to net weight/gross weight incompatibility  and 'Enters through' until the 
 'warnings have gone. the Recursion is used as the amount of warnings is ambiguous.  
 Sub RecursiveSAPStatusBarCheck()
-	session.findById("wnd[0]").sendVKey 0
+    session.findById("wnd[0]").sendVKey 0
     If session.FindById("wnd[0]/sbar").Text = "The net weight is greater than the gross weight" Then 'FYI this is case sensative 		
         Call RecursiveSAPStatusBarCheck 
     Else
