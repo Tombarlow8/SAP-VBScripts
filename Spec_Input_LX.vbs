@@ -35,7 +35,7 @@ Unit_width = Trim(CStr(objSheet.Cells(52, 5).Value))
 Unit_height = Trim(CStr(objSheet.Cells(53, 5).Value))
 Unit_gross_weight = Trim(CStr(objSheet.Cells(54,5).Value))
 Unit_vol = Trim(CStr(objSheet.Cells(55,5).Value))
-Unit_Net_weight = Trim(CStr(objSheet.Cells(55,5).Value))
+Unit_Net_weight = Trim(CStr(objSheet.Cells(56,5).Value))
 
 Pak_ean = Trim(CStr(objSheet.Cells(57, 5).Value))
 Pak_qty = Trim(CStr(objSheet.Cells(58, 5).Value))
@@ -53,6 +53,7 @@ Std_height = Trim(CStr(objSheet.Cells(69, 5).Value))
 Std_gross_weight = Trim(CStr(objSheet.Cells(70, 5).Value))
 Std_vol = Trim(CStr(objSheet.Cells(71,5).Value))
 
+Lay_ean = Trim(CStr(objSheet.Cells(72, 5).Value))
 Lay_qty = Trim(CStr(objSheet.Cells(73, 5).Value))
 Lay_length = Trim(CStr(objSheet.Cells(74, 5).Value))
 Lay_width = Trim(CStr(objSheet.Cells(75, 5).Value))
@@ -60,6 +61,7 @@ Lay_height = Trim(CStr(objSheet.Cells(76, 5).Value))
 Lay_gross_weight = Trim(CStr(objSheet.Cells(77, 5).Value))
 Lay_vol = Trim(CStr(objSheet.Cells(78,5).Value))
 
+FP_ean = Trim(CStr(objSheet.Cells(79, 5).Value))
 FP_qty = Trim(CStr(objSheet.Cells(80, 5).Value))
 FP_length = Trim(CStr(objSheet.Cells(81, 5).Value))
 FP_width = Trim(CStr(objSheet.Cells(82, 5).Value))
@@ -82,6 +84,9 @@ Special_movement_ind = Trim(CStr(objSheet.Cells(99,5).Value))
 Despatchable = Trim(CStr(objSheet.Cells(113,5).Value)) 
 Non_Conforming = Trim(CStr(objSheet.Cells(115,5).Value)) 
 Restrict = Trim(CStr(objSheet.Cells(114,5).Value))
+
+Do_not_use_layer = Trim(CStr(objSheet.Cells(116,5).Value))
+Do_not_use_Pallet = Trim(CStr(objSheet.Cells(117,5).Value))
 
 
 Call ZUKMM02LX
@@ -109,21 +114,22 @@ Sub MM02()
         session.findById("wnd[1]").sendVKey 0
     End If
 
+    
     'Changing the Net weight of the Unit as it can only be done in MM01/2
     session.findById("wnd[0]/tbar[1]/btn[30]").press
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02").select
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpZU02/ssubTABFRA1:SAPLMGMM:2110/subSUB2:SAPLMGD1:8020/tblSAPLMGD1TC_ME_8020/txtSMEINH-NTGEW[18,0]").text = Unit_Net_weight
     'session.findById("wnd[0]").sendVKey 0
-
+    
     'Clicking the 'main data' button
     session.findById("wnd[0]/tbar[1]/btn[27]").press
-
-    '"Enters through" until the warnings have gone needs an initial enter to start
-    session.findById("wnd[0]").sendVKey 0
-    Call RecursiveSAPStatusBarCheck
     
+    '"Enters through" until the warnings have gone needs an initial enter to start
+    'session.findById("wnd[1]").sendVKey 0
+    Call RecursiveSAPStatusBarCheck
+
     'Filling in the backscreen 'Warehouse managment 1'
-    'session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21").select
+    session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21").select
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZA").text = Stock_placement_ind
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP21/ssubTABFRA1:SAPLMGMM:2000/subSUB4:SAPLMGD1:2733/ctxtMLGN-LTKZE").text = Stock_Removal_ind
     '//TODO: check if these 2 are the correct way round
@@ -146,8 +152,10 @@ Sub MM02()
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-LAYNB").text = Layers_per_Pallet
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-YNBPROD_LAY").text = Boxes_per_Layer
     session.findById("wnd[0]/usr/tabsTABSPR1/tabpSP34/ssubTABFRA1:SAPLMGMM:2004/subSUB2:SAPLYMM_BPGV2_2:2002/txtYTGRP11-HOEHE_MAN").text = Support_Height    
+
     'Save
     session.findById("wnd[0]/tbar[0]/btn[11]").press
+
 End sub
 
 
@@ -174,9 +182,9 @@ Sub MM17()
 
     '//TODO: Alisatirs spreadsheet could include this check. With LX 
     'Grabs the pack size from SAP as this should not be changed initially by Stock Control
-    objSheet.Cells(38, 2).Value = session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD3-VALUE-RIGHT[3,2]").text
-
-    If objSheet.Cells(38, 6).Value = "Pack Size Does Not Match" Then 
+    objSheet.Cells(2, 7).Value = session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD3-VALUE-RIGHT[3,2]").text
+    msgbox objSheet.Cells(2, 7).Value
+    If objSheet.Cells(2, 7).Value = "Pack Size Does Not Match" Then 
         Msgbox "Pack Size cannot be changed From " & session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD3-VALUE-RIGHT[3,2]").text & " to "  & Trim(CStr(objSheet.Cells(8, 8).Value))
         session.findById("wnd[0]/tbar[0]/btn[12]").press
         session.findById("wnd[0]/tbar[0]/btn[12]").press
@@ -239,6 +247,8 @@ Sub MM17()
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD11-VALUE-LEFT[11,3]").text = "G"
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD11-VALUE-LEFT[11,4]").text = "G"
 
+    '//TODO: add error handling here there is a success/error message we can pull out
+
     session.findById("wnd[0]/tbar[0]/btn[11]").press
 End Sub
 
@@ -277,11 +287,16 @@ Sub YLC01()
         session.findById("wnd[0]/tbar[1]/btn[5]").press
     End If
 
-    If Trim(CStr(objSheet.Cells(116,5).Value)) = "X" Then
+    If Do_not_use_Pallet = "X" Then
         session.findById("wnd[0]/usr/chkYLCD01-YP_NOTUSE").selected = true
+    Else
+        session.findById("wnd[0]/usr/chkYLCD01-YP_NOTUSE").selected = false
     End If
-    If Trim(CStr(objSheet.Cells(117,5).Value)) = "X" Then
+
+    If Do_not_use_layer = "X" Then
         session.findById("wnd[0]/usr/chkYLCD01-YL_NOTUSE").selected = true
+    Else
+        session.findById("wnd[0]/usr/chkYLCD01-YL_NOTUSE").selected = false
     End If 
     session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR4").text = Non_Conforming
     session.findById("wnd[0]/usr/ctxtYLCD01-YLOCPAR5").text = Despatchable
