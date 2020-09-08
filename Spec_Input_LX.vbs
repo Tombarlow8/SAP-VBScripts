@@ -247,9 +247,11 @@ Sub MM17()
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD11-VALUE-LEFT[11,3]").text = "G"
     session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/ctxtSTRUC-FIELD11-VALUE-LEFT[11,4]").text = "G"
 
-    '//TODO: add error handling here there is a success/error message we can pull out
-
     session.findById("wnd[0]/tbar[0]/btn[11]").press
+
+    '//TODO: add error handling here there is a success/error message we can pull out
+    Call MM17StatusCheck
+
 End Sub
 
 
@@ -322,4 +324,19 @@ Sub RecursiveSAPStatusBarCheck()
     Else
         Exit Sub    
     End If
+End Sub
+
+
+
+Sub MM17StatusCheck()
+    value =  session.findById("wnd[0]/usr/tblSAPLMASSMSGLISTTC_MSG/lblLIGHT[0,0]").IconName
+    if value = "S_TL_G" Then
+        Exit Sub 
+    elseif value = "S_TL_R" Then
+        msgbox = "There is an error in the inputs please see details"
+        wscript.Quit
+    elseif value = "S_TL_Y" Then
+        msgbox = "There is an warning error in the inputs please see details"
+        wscript.Quit
+    End if
 End Sub
