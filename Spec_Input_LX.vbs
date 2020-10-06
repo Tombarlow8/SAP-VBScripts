@@ -183,9 +183,8 @@ Sub MM17()
     '//TODO: Alisatirs spreadsheet could include this check. With LX 
     'Grabs the pack size from SAP as this should not be changed initially by Stock Control
     objSheet.Cells(2, 7).Value = session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD3-VALUE-RIGHT[3,2]").text
-    msgbox objSheet.Cells(2, 7).Value
-    If objSheet.Cells(2, 7).Value = "Pack Size Does Not Match" Then 
-        Msgbox "Pack Size cannot be changed From " & session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD3-VALUE-RIGHT[3,2]").text & " to "  & Trim(CStr(objSheet.Cells(8, 8).Value))
+    If Trim(CStr(objSheet.Cells(2, 7).Value)) <> Pak_qty Then 
+        Msgbox "Pack Size cannot be changed From " & session.findById("wnd[0]/usr/tabsTBSTRP_TABLES/tabpTAB1/ssubFIELDS:SAPLMASSINTERFACE:0202/subSUB_DATA:SAPLMASSINTERFACE:0212/tblSAPLMASSINTERFACETCTRL_TABLE/txtSTRUC-FIELD3-VALUE-RIGHT[3,2]").text & " to "  & Pak_qty
         session.findById("wnd[0]/tbar[0]/btn[12]").press
         session.findById("wnd[0]/tbar[0]/btn[12]").press
         session.findById("wnd[0]/tbar[0]/btn[12]").press
@@ -250,6 +249,7 @@ Sub MM17()
     session.findById("wnd[0]/tbar[0]/btn[11]").press
 
     '//TODO: add error handling here there is a success/error message we can pull out
+    msgbox "check"
     Call MM17StatusCheck
 
 End Sub
@@ -340,3 +340,4 @@ Sub MM17StatusCheck()
         wscript.Quit
     End if
 End Sub
+
