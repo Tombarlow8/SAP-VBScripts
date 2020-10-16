@@ -340,4 +340,3 @@ Sub MM17StatusCheck()
         wscript.Quit
     End if
 End Sub
-
