@@ -101,6 +101,8 @@ Sub MM02()
     session.findById("wnd[0]/usr/ctxtRMMG1-MATNR").text = FG
     session.findById("wnd[0]").sendVKey 0
     session.findById("wnd[0]").sendVKey 0
+    session.findById("wnd[1]/usr/ctxtRMMG1-WERKS").text = Plant
+    session.findById("wnd[1]/usr/ctxtRMMG1-LGNUM").text = Warehouse_number
     session.findById("wnd[1]").sendVKey 0
 
     'If an error pops up in the status bar while in MM02 it will create the code in MM01 instead
